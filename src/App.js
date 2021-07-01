@@ -1,25 +1,32 @@
-import logo from './logo.svg';
+import React, { useContext } from 'react';
 import './App.css';
+import {Context} from "./index";
 
-function App() {
+import { useAuthState } from 'react-firebase-hooks/auth';
+import {Chat} from './components/Chat';
+import {LoginBtn} from './components/LoginBtn';
+import {LogoutBtn} from './components/LogoutBtn';
+import { Loader } from './components/Loader';
+
+export const App = () => {
+  const {auth} = useContext(Context)
+  const [user, loading] = useAuthState(auth);
+
+  if (loading) {
+    return <Loader/>
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header>
+        <h1>WomanUP</h1>
+        <LogoutBtn />
       </header>
+
+      <section>
+        {user ? <Chat /> : <LoginBtn />}
+      </section>
+
     </div>
   );
 }
-
-export default App;
